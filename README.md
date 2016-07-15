@@ -28,7 +28,7 @@ If you want to use a container network / link, set DB_OPTS to empty, and set the
 
 Example using host socket :
 ```
-docker run -d -p 13337:64738/tcp -p 13337:64738/udp --name mumble \
+docker run -d -p 64738:64738/tcp -p 64738:64738/udp --name mumble \
  -e DB_DRIVER=QMYSQL -e DB_USERNAME=mumble -e DB_PASSWORD=somepwd -e DB_HOST=localhost \
  -e SERVER_NAME=mumble -v /var/run/mysqld/mysqld.sock:/opt/db/mysqld.sock \
  -e DATABASE=mumble -e SERVER_PASSWORD=pass anakhon/mumble-docker
@@ -50,5 +50,7 @@ USER_COUNT=max user on the server (default: 50)
 SERVER_PASSWORD=your server password \
 WELCOME_TEXT=the welcome text \
 SERVER_NAME=the server name
+UID=the murmur user ID (default:1000)
+GID=the murmur group ID (default:1000)
 
 ```
