@@ -9,7 +9,6 @@ set -e
 if [[ $GID != 1000 || $UID != 1000 ]]
 then
     deluser murmur
-    delgroup murmur
     addgroup -g $GID murmur
     adduser -DS -s /bin/false -u 1000 -G murmur murmur
 fi
