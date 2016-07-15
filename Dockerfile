@@ -25,7 +25,7 @@ RUN apk --no-cache add \
     && chmod 700 /start
 
 
-EXPOSE 64738
+EXPOSE 64738/udp 64738/tcp
 
 VOLUME ["/etc/murmur", "/opt/db/", "/var/log/murmur"]
 
