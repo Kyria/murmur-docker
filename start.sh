@@ -10,7 +10,7 @@ if [[ $GID != 1000 || $UID != 1000 ]]
 then
     deluser murmur
     addgroup -g $GID murmur
-    adduser -DS -s /bin/false -u 1000 -G murmur murmur
+    adduser -DS -s /bin/false -u $UID -G murmur murmur
 fi
 
 # if no murmur ini has been given / already set, set values and move it
