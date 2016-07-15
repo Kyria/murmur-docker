@@ -3,15 +3,14 @@ TMP_INI=/tmp/murmur.ini
 FINAL_INI=/etc/murmur/murmur.ini
 
 set -e
+
 # force UID / GID of murmur user, in case we want it to match host values
-if [[ $GID != 1000 ]]
-then
-    delgroup murmur
-    addgroup -g $GID murmur
-fi
-if [[ $UID != 1000 ]]
+# and no usermod available...
+if [[ $GID != 1000 || $UID != 1000 ]]
 then
     deluser murmur
+    delgroup murmur
+    addgroup -g $GID murmur
     adduser -DS -s /bin/false -u 1000 -G murmur murmur
 fi
 
