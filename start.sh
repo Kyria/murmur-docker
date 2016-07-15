@@ -18,12 +18,12 @@ fi
 # if no murmur ini has been given / already set, set values and move it
 if [[ ! -f "$FINAL_INI" ]]
 then
-    set -i "/database\s*=/ c database=$DATABASE" $TMP_INI
-    set -i "/host\s*=/ c host=$HOST" $TMP_INI
-    set -i "/users\s*=/ c users=$USER_COUNT" $TMP_INI
-    set -i "/serverpassword\s*=/ c serverpassword=$SERVER_PASSWORD" $TMP_INI
-    set -i "/welcometext\s*=/ c welcometext=$WELCOME_TEXT" $TMP_INI
-    set -i "/registerName\s*=/ c registerName=$SERVER_NAME" $TMP_INI
+    sed -i "/database\s*=/ c database=$DATABASE" $TMP_INI
+    sed -i "/host\s*=/ c host=$HOST" $TMP_INI
+    sed -i "/users\s*=/ c users=$USER_COUNT" $TMP_INI
+    sed -i "/serverpassword\s*=/ c serverpassword=$SERVER_PASSWORD" $TMP_INI
+    sed -i "/welcometext\s*=/ c welcometext=\"$WELCOME_TEXT\"" $TMP_INI
+    sed -i "/registerName\s*=/ c registerName=$SERVER_NAME" $TMP_INI
 
     if [[ ! -z "$DB_DRIVER" ]]
     then
