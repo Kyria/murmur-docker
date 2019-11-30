@@ -14,12 +14,12 @@ Or open the logs `docker logs murmur` and look for a line like
 <W>2019-11-30 21:59:04.073 1 => Password for 'SuperUser' set to 'XXXXXXXXXXX'
 ```
 
-## Init
+## Init-murmur
 
 If you want to be able to personalize your configuration before running, run the following command first.
 **You need to create / map a volume first, see next part**
 
-```docker run --rm -v murmur-docker:/opt/murmur -it anakhon/murmur-docker init```
+```docker run --rm -v murmur-docker:/opt/murmur -it anakhon/murmur-docker Init-murmur```
 
 Then edit the `/var/lib/docker/volumes/murmur-docker/_data/docker-murmur.ini` file. 
 You can for example set the database to be in the same folder: `database=/opt/murmur/murmur.sqlite`
