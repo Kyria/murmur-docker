@@ -19,7 +19,7 @@ Or open the logs `docker logs murmur` and look for a line like
 If you want to be able to personalize your configuration before running, run the following command first.
 **You need to create / map a volume first, see next part**
 
-```docker run --rm -v murmur-docker:/opt/murmur -it anakhon/murmur-docker Init-murmur```
+```docker run --rm -v murmur-docker:/opt/murmur -it anakhon/murmur-docker init-murmur```
 
 Then edit the `/var/lib/docker/volumes/murmur-docker/_data/docker-murmur.ini` file. 
 You can for example set the database to be in the same folder: `database=/opt/murmur/murmur.sqlite`
@@ -52,3 +52,11 @@ docker run -d -P -v /your/host/path/of/choice:/opt/murmur --name murmur anakhon/
 ## Exposing ports
 
 By default, tcp and udp port 64738 are exposed. If you want to set which port to map, use `-p <Your-UDP-Port>:64738/udp -p <your-TCP-port>:64738/tcp`
+
+## Update
+
+To update:
+1. Stop the container `docker stop murmur`
+2. Pull the latest `docker pull anakhon/murmur-docker`
+3. Rerun the init (for file & folder rights and other stuff) `docker run --rm -v murmur-docker:/opt/murmur -it anakhon/murmur-docker init-murmur`
+4. Start the container `docker start murmur`
