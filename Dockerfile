@@ -13,5 +13,6 @@ EXPOSE 64738/udp 64738/tcp
 CMD ["/usr/bin/murmurd", "-fg", "-v", "-ini", "/opt/murmur/docker-murmur.ini"]
 
 COPY ./bin /usr/local/bin
+RUN chmod a+x /usr/local/bin/*
 
 VOLUME ["/opt/murmur/"]
