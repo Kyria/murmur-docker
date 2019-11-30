@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# force the values, just in case
+chmod -R 755 /opt/murmur
+chown -R murmur:murmur /opt/murmur
+
+if [[ ! -r "/opt/murmur/docker-murmur.ini" ]]
+then
+    echo "docker-murmur.ini doesn't exist..."
+    cp -f /etc/murmur.ini /opt/murmur/docker-murmur.ini 
+    echo "docker-murmur.ini created."
+    echo ""
+    echo "Please edit the file in the volume you mapped for '/opt/murmur/'"
+    echo "Then run the docker image normally."
+    exit 1
+else 
+    echo "docker-murmur.ini exists in /opt/murmur"
+    echo ""
+    echo "Please edit the file in the volume you mapped for '/opt/murmur/'"
+    echo "Then run the docker image normally."
+    exit 2
+fi
+

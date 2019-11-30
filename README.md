@@ -1,56 +1,54 @@
 # murmur-docker
-dockerfile for murmur with auto check version
+dockerfile for murmur. It will use the latest version available in alpine 3.10 (currently 1.3.0-r4)
 
 ## Simple run
-```docker run -d -p 64738:64738/tcp -p 64738:64738/udp --name murmur anakhon/murmur-docker```
 
-## Database
-By default, this container save data in ```/opt/db/murmur.sqlite``` in the container, so you will need to map volumes to save it on your host
-```docker run -d -p 64738:64738/tcp -p 64738:64738/udp -v /your/path/to/murmur.sqlite:/opt/db/murmur.sqlite --name murmur anakhon/murmur-docker```
+This will use the default murmur.ini configuration to run the server
+```docker run -d -P --name murmur anakhon/murmur-docker```
 
-If you want to use another database (such as MySQL), you will need to bind environnement variables to achieve that.
-By default, the container will set database data in murmur.ini if you give ```DB_DRIVER```
+Get the superuser password with the following command:
+`docker logs murmur | grep SuperUser` 
 
+Or open the logs `docker logs murmur` and look for a line like 
 ```
-DATABASE=your database name
-DB_DRIVER=db driver (see murmur doc)
-DB_USERNAME=db username
-DB_PASSWORD=db password
-DB_HOST=db host
-DB_PORT=db port (default: 3306)
-DB_PREFIX=db table prefix (default: murmur_)
-DB_OPTS=additionnal options (default: "UNIX_SOCKET=/opt/db/mysqld.sock")
+<W>2019-11-30 21:59:04.073 1 => Password for 'SuperUser' set to 'XXXXXXXXXXX'
 ```
 
-If you use your host database, you can simply map your socket to the one in the container (DB_OPTS)
+## Init
 
-If you want to use a container network / link, set DB_OPTS to empty, and set the host as you need it.
+If you want to be able to personalize your configuration before running, run the following command first.
+**You need to create / map a volume first, see next part**
 
-Example using host socket :
-```
-docker run -d -p 64738:64738/tcp -p 64738:64738/udp --name mumble \
- -e DB_DRIVER=QMYSQL -e DB_USERNAME=mumble -e DB_PASSWORD=somepwd -e DB_HOST=localhost \
- -e SERVER_NAME=mumble -v /var/run/mysqld/mysqld.sock:/opt/db/mysqld.sock \
- -e DATABASE=mumble -e SERVER_PASSWORD=pass anakhon/mumble-docker
+```docker run --rm -v murmur-docker:/opt/murmur -it anakhon/murmur-docker init```
+
+Then edit the `/var/lib/docker/volumes/murmur-docker/_data/docker-murmur.ini` file. 
+You can for example set the database to be in the same folder: `database=/opt/murmur/murmur.sqlite`
+
+## Using volume
+
+### Create your volume 
+
+If you want to be able to edit you configuration and/or backup the database, you might want to create a volume for it.
+```bash
+docker volume create --name murmur-docker
 ```
 
-## environnement variables
-The full list is the following
-```
-DATABASE=your database name
-DB_DRIVER=db driver (see murmur doc)
-DB_USERNAME=db username
-DB_PASSWORD=db password
-DB_HOST=db host
-DB_PORT=db port (default: 3306)
-DB_PREFIX=db table prefix (default: murmur_)
-DB_OPTS=additionnal options (default: "UNIX_SOCKET=/opt/db/mysqld.sock")
-HOST=the host to bind (default: 0.0.0.0)
-USER_COUNT=max user on the server (default: 50)
-SERVER_PASSWORD=your server password \
-WELCOME_TEXT=the welcome text \
-SERVER_NAME=the server name
-UID=the murmur user ID (default:1000)
-GID=the murmur group ID (default:1000)
+Then simply add the `-v` flag to the docker command. 
+Example:
+```bash
+docker run -d -P -v murmur-docker:/opt/murmur --name murmur anakhon/murmur-docker
+``` 
 
-```
+You can then access the volume on your host in this default location `/var/lib/docker/volumes/murmur-docker/_data` to backup / edit it. 
+
+### Using mapped volume
+
+If you want to map another folder of your choice, just use the mapping with `-v`
+Example:
+```bash
+docker run -d -P -v /your/host/path/of/choice:/opt/murmur --name murmur anakhon/murmur-docker
+``` 
+
+## Exposing ports
+
+By default, tcp and udp port 64738 are exposed. If you want to set which port to map, use `-p <Your-UDP-Port>:64738/udp -p <your-TCP-port>:64738/tcp`
