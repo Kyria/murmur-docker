@@ -10,12 +10,12 @@ RUN addgroup -g 1001 murmur \
     && chmod -R 755 /opt/murmur \
     && chown -R murmur:murmur /opt/murmur
 
-USER murmur:murmur
 EXPOSE 64738/udp 64738/tcp
+VOLUME ["/opt/murmur/"]
 
 CMD ["/usr/bin/murmurd", "-fg", "-v", "-ini", "/opt/murmur/docker-murmur.ini"]
 
 COPY ./bin /usr/local/bin
 RUN chmod a+x /usr/local/bin/*
 
-VOLUME ["/opt/murmur/"]
+USER murmur:murmur
