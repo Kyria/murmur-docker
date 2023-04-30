@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM alpine:3.17
 
 # init some stuff
 # also get the latest mumble version from github api
